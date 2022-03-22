@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to VS Client",
+      "request": "attach",
+      "type": "mono",
+      "address": "localhost",
+      "port": 12345
+    },
+    {
+    "name": "Launch VS Server",
+    "type": "mono",
+    "request": "launch",
+    "preLaunchTask": "Build (Debug)",
+    "program": "${env:VINTAGE_STORY}/VintagestoryServer.exe",
+    "args": [
+      // "--playStyle" , "preset-surviveandbuild",
+      // "--openWorld" , "modding test world",
+      "--dataPath", "${workspaceFolder}/test-server",
+      "--addModPath", "${workspaceFolder}/bin/Debug/net461",
+      "--addOrigin" , "${workspaceFolder}/resources",
+    ],
+    "console": "internalConsole",
+    "internalConsoleOptions": "openOnSessionStart",
+  }]
+}
