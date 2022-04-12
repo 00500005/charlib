@@ -18,8 +18,10 @@
       // "--playStyle" , "preset-surviveandbuild",
       // "--openWorld" , "modding test world",
       "--dataPath", "${workspaceFolder}/test-server",
-      "--addModPath", "${workspaceFolder}/bin/Debug/net461",
-      "--addOrigin" , "${workspaceFolder}/resources",
+      "--addModPath", "${workspaceFolder}/CharlibCore/bin/Debug/net461",
+      "--addModPath", "${workspaceFolder}/CharlibClasses/bin/Debug/net461",
+      "--addOrigin", "${workspaceFolder}/CharlibCore/resources/assets",
+      "--addOrigin", "${workspaceFolder}/CharlibClasses/resources/assets"
     ],
     "console": "internalConsole",
     "internalConsoleOptions": "openOnSessionStart",

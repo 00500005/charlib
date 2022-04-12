@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+    <PackageReference Include="coverlet.collector" Version="3.1.0" />
+		<PackageReference Include="Moq" Version="4.17.2" />
+		<Reference Include="/usr/share/vintagestory/VintagestoryAPI.dll" />
+		<Reference Include="/usr/share/vintagestory/VintagestoryLib.dll" />
+		<Reference Include="/usr/share/vintagestory/Mods/VSEssentials.dll" />
+		<Reference Include="/usr/share/vintagestory/Mods/VSSurvivalMod.dll" />
+    <Reference Include="/usr/share/vintagestory/Lib/Newtonsoft.Json.dll" />
+    <Reference Include="/usr/share/vintagestory/Lib/protobuf-net.dll" />
+    <Reference Include="/usr/share/vintagestory/Lib/0Harmony.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)/CharlibCore/charlib.csproj" />
+  </ItemGroup>
+
+</Project>

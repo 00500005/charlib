@@ -1,0 +1,13 @@
+{
+  "type": "code",
+  "modid": "charlib_core",
+  "name": "Character Library Core",
+  "authors": [ "00500005" ],
+  "description": 
+  "Library that adds various player stats for world interactions",
+  "version": "0.0.0-dev",
+  "dependencies": {
+    "game": "1.16.4",
+    "survival": "1.16.4"
+  }
+}
