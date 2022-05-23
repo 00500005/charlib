@@ -1,29 +1,50 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net60</TargetFrameworks>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
+    <VSVersion>1.16.5</VSVersion>
+    <VSLocation>$(SolutionDir)/vendor-vs/$(VSVersion)</VSLocation>
   </PropertyGroup>
+  <!-- <PropertyGroup Condition="'$(TargetFramework)' == 'mono-4.0'">
+    <TargetFrameworkIdentifier>Mono</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkRootPath>$(NuGetPackageRoot)Mono.ReferenceAssemblies.v4.5</TargetFrameworkRootPath>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup> -->
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+    <!-- <PackageReference Include="Mono.ReferenceAssemblies.v4.5" Version="1.0.0" /> -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" /> 
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" version="4.1.0" />
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.15.0" />
+    <PackageReference Include="MSBuildTasks" Version="1.5.0.235" />
     <PackageReference Include="coverlet.collector" Version="3.1.0" />
-		<PackageReference Include="Moq" Version="4.17.2" />
-		<Reference Include="/usr/share/vintagestory/VintagestoryAPI.dll" />
-		<Reference Include="/usr/share/vintagestory/VintagestoryLib.dll" />
-		<Reference Include="/usr/share/vintagestory/Mods/VSEssentials.dll" />
-		<Reference Include="/usr/share/vintagestory/Mods/VSSurvivalMod.dll" />
-    <Reference Include="/usr/share/vintagestory/Lib/Newtonsoft.Json.dll" />
-    <Reference Include="/usr/share/vintagestory/Lib/protobuf-net.dll" />
-    <Reference Include="/usr/share/vintagestory/Lib/0Harmony.dll" />
-  </ItemGroup>
+    <PackageReference Include="NUnit.Analyzers" Version="3.2.0" />
 
-  <ItemGroup>
+		<PackageReference Include="Moq" Version="4.17.2" />
+		<Reference Include="$(VSLocation)/VintagestoryAPI.dll" />
+		<Reference Include="$(VSLocation)/VintagestoryLib.dll" />
+		<Reference Include="$(VSLocation)/Mods/VSEssentials.dll" />
+		<Reference Include="$(VSLocation)/Mods/VSSurvivalMod.dll" />
+    <Reference Include="$(VSLocation)/Lib/Newtonsoft.Json.dll" />
+    <Reference Include="$(VSLocation)/Lib/protobuf-net.dll" />
+    <Reference Include="$(VSLocation)/Lib/0Harmony.dll" />
     <ProjectReference Include="$(SolutionDir)/CharlibCore/charlib.csproj" />
   </ItemGroup>
-
+  <!-- <Target Name="RunTests" DependsOnTargets="Build" 
+    Condition="'$(TargetFramework)' == 'mono-4.0'">
+    <PropertyGroup>
+      <Mono>mono debug</Mono>
+      <NunitDir>$(NuGetPackageRoot)nunit.consolerunner/</NunitDir>
+      <NunitExe>$(NunitDir)3.15.0/tools/nunit3-console.exe</NunitExe>
+      <TargetDir>$(ProjectDir)bin/Debug/mono-4.0/</TargetDir>
+      <TestDll>$(TargetDir)$(AssemblyName).dll</TestDll>
+    </PropertyGroup>
+    <Exec Command="$(Mono) $(NunitExe) $(TestDll)" />
+  </Target> -->
 </Project>

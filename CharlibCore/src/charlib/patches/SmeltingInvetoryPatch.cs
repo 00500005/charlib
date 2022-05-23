@@ -1,13 +1,13 @@
 
 using System;
 using System.Reflection;
-using charlib.context;
-using charlib.ip.cooking;
+using Charlib.PatchChain;
+using Charlib.PatchChain.Key;
 using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.GameContent;
 
-namespace charlib {
+namespace Charlib {
 	public static class SmeltingInventoryPatch
 	{
     public static void Patch(Harmony harmony) {
@@ -17,19 +17,20 @@ namespace charlib {
       ref InventorySmelting __instance,
       ref ItemSlot __result
     ) {
+      var inv = __instance;
       ItemSlotWatertight? isw = __result as ItemSlotWatertight;
-      if (isw != null) {
-        isw.capacityLitres = CharLib.State.ChainRegistry.GetChain(
-          new FirepitCookingPotCapcityLiters()
-        ).Resolve(PlayerAndBlockEntity.FromInventory(
-          __instance, LastPlayerBEB.GetLastModifyingPlayer
-        ), isw.capacityLitres);
+      if (isw?.capacityLitres != null) {
+        isw.capacityLitres = new FirepitCookingPotCapacityLiters()
+          .ApplyPatchChain(PlayerAndBlockEntity.FromInventory(
+            __instance, LastPlayerBEB.GetLastModifyingPlayer
+          ), isw.capacityLitres);
       }
-      __result.MaxSlotStackSize = CharLib.State.ChainRegistry.GetChain(
-          new FirepitCookingPotStackSize()
-        ).Resolve(PlayerAndBlockEntity.FromInventory(
-          __instance, LastPlayerBEB.GetLastModifyingPlayer
-        ), __result.MaxSlotStackSize);
+      if (__result != null) {
+        __result.MaxSlotStackSize = new FirepitCookingPotStackSize()
+          .ApplyPatchChain(PlayerAndBlockEntity.FromInventory(
+            __instance, LastPlayerBEB.GetLastModifyingPlayer
+          ), __result.MaxSlotStackSize);
+      }
     }
     private static PropertyInfo? GetIndexer(Type type) {
       foreach (PropertyInfo p in type.GetProperties(

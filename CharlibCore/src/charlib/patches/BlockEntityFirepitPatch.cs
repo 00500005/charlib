@@ -4,10 +4,9 @@ using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
-using charlib.context;
-using charlib.ip.cooking;
+using Charlib.PatchChain;
 
-namespace charlib {
+namespace Charlib {
 	[HarmonyPatch(typeof(BlockEntityFirepit))]
 	public static class BlockEntityFirepitPatch
 	{
@@ -17,11 +16,10 @@ namespace charlib {
       ref BlockEntityFirepit __instance, 
       ref float __result
     ) {
-      __result = CharLib.State.ChainRegistry.GetChain(
-        new FirepitCookingTime()
-      ).Resolve(PlayerAndBlockEntity.FromBlockEntity(
-        __instance, LastPlayerBEB.GetLastModifyingPlayer
-      ), __result);
+      __result = new PatchChain.Key.FirepitCookingTime()
+        .ApplyPatchChain(PlayerAndBlockEntity.FromBlockEntity(
+          __instance, LastPlayerBEB.GetLastModifyingPlayer
+        ), __result);
     }
   }
 }

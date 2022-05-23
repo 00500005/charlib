@@ -1,4 +1,10 @@
+tmp/
+vendor/*
+!vendor/README.md
+vendor-vs/*
+!vendor-vs/link.sh
 obj/
 bin/
+TestResults/
 test-server/
 workspace.code-workspace

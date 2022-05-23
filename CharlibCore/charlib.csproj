@@ -1,22 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-		<TargetFrameworks>net461;net6.0</TargetFrameworks>
+    <TargetFrameworks>net461;net60</TargetFrameworks>
     <AssemblyVersion>0.0.0</AssemblyVersion>
     <InformationalVersion>0.0.0-dev.0</InformationalVersion>
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
+    <VSVersion>1.16.5</VSVersion>
+    <VSLocation>$(SolutionDir)/vendor-vs/$(VSVersion)</VSLocation>
+    <DebugType>portable</DebugType>
 	</PropertyGroup>
+  <!-- <PropertyGroup Condition="'$(TargetFramework)' == 'mono-4.0'">
+    <TargetFrameworkIdentifier>mono</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup> -->
 	<ItemGroup>
-		<Reference Include="/usr/share/vintagestory/VintagestoryAPI.dll" />
-		<Reference Include="/usr/share/vintagestory/VintagestoryLib.dll" />
-		<Reference Include="/usr/share/vintagestory/Mods/VSEssentials.dll" />
-		<Reference Include="/usr/share/vintagestory/Mods/VSSurvivalMod.dll" />
-    <Reference Include="/usr/share/vintagestory/Lib/Newtonsoft.Json.dll" />
-    <Reference Include="/usr/share/vintagestory/Lib/protobuf-net.dll" />
-    <Reference Include="/usr/share/vintagestory/Lib/0Harmony.dll" />
-		<Reference Include="$(SolutionDir)/lib/xlib.dll" />
-		<Reference Include="$(SolutionDir)/lib/exper.dll" />
+		<Reference Include="$(VSLocation)/VintagestoryAPI.dll" />
+		<Reference Include="$(VSLocation)/VintagestoryLib.dll" />
+		<Reference Include="$(VSLocation)/Mods/VSEssentials.dll" />
+		<Reference Include="$(VSLocation)/Mods/VSSurvivalMod.dll" />
+    <Reference Include="$(VSLocation)/Lib/Newtonsoft.Json.dll" />
+    <Reference Include="$(VSLocation)/Lib/protobuf-net.dll" />
+    <Reference Include="$(VSLocation)/Lib/0Harmony.dll" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
@@ -25,7 +31,18 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+  <!-- <Target Name="RunTests" DependsOnTargets="Build">
+  </Target> -->
 
+	<Target Name="CopyForTestingServer" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+        <BuiltDlls Include="$(TargetDir)/charlib.dll;" />
+    </ItemGroup>
+    <Copy 
+      SourceFiles="@(BuiltDlls)"
+      DestinationFolder="$(TargetDir)/../$(TargetFramework)-min"
+    />
+  </Target>
 	<Target Name="ReleasePackage" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
 		<ZipDirectory DestinationFile="bin/$(TargetName)-$(InformationalVersion).zip" SourceDirectory="$(TargetDir)" Overwrite="true" />
 		<ZipDirectory DestinationFile="bin/$(TargetName).zip" SourceDirectory="$(TargetDir)" Overwrite="true" />

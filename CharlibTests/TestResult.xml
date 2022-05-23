@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="0" runstate="Runnable" testcasecount="1" result="Failed" label="Error" total="1" passed="0" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.15.0.0" clr-version="4.0.30319.42000" start-time="2022-05-22 16:37:08Z" end-time="2022-05-22 16:37:08Z" duration="0.015772">
+  <command-line><![CDATA[/home/me/.nuget/packages/nunit.consolerunner/3.15.0/tools/nunit3-console.exe /home/me/projects/charlib/CharlibTests/bin/Debug/mono-4.0/tests.dll]]></command-line>
+  <test-suite type="Assembly" id="0" name="" fullname="" runstate="NotRunnable" testcasecount="1" result="Failed" label="Error" start-time="2022-05-22 16:37:08Z" end-time="2022-05-22 16:37:08Z" duration="0.001" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <failure>
+      <message><![CDATA[System.ArgumentException : The net-4.6.1 framework is not available.
+Available frameworks: mono-4.0]]></message>
+      <stack-trace><![CDATA[--ArgumentException
+The net-4.6.1 framework is not available.
+Available frameworks: mono-4.0
+  at NUnit.Engine.Services.TestAgency.GetAgent (NUnit.Engine.TestPackage package) [0x0008e] in <83a050af71a545d186bc8c62a15c3005>:0 
+  at NUnit.Engine.Runners.ProcessRunner.CreateAgentAndRunnerIfNeeded () [0x0003d] in <83a050af71a545d186bc8c62a15c3005>:0 
+  at NUnit.Engine.Runners.ProcessRunner.RunTests (NUnit.Engine.ITestEventListener listener, NUnit.Engine.TestFilter filter) [0x0001f] in <83a050af71a545d186bc8c62a15c3005>:0 
+]]></stack-trace>
+    </failure>
+  </test-suite>
+</test-run>

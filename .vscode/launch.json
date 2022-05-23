@@ -9,19 +9,28 @@
       "port": 12345
     },
     {
+      "name": "Attach to VS Server (Manual)",
+      "request": "attach",
+      "type": "mono",
+      "address": "localhost",
+      "port": 12344
+    },
+    {
     "name": "Launch VS Server",
     "type": "mono",
     "request": "launch",
     "preLaunchTask": "Build (Debug)",
     "program": "${env:VINTAGE_STORY}/VintagestoryServer.exe",
     "args": [
-      // "--playStyle" , "preset-surviveandbuild",
-      // "--openWorld" , "modding test world",
       "--dataPath", "${workspaceFolder}/test-server",
-      "--addModPath", "${workspaceFolder}/CharlibCore/bin/Debug/net461",
-      "--addModPath", "${workspaceFolder}/CharlibClasses/bin/Debug/net461",
-      "--addOrigin", "${workspaceFolder}/CharlibCore/resources/assets",
-      "--addOrigin", "${workspaceFolder}/CharlibClasses/resources/assets"
+      "--addModPath", 
+      "${workspaceFolder}/vendor",
+      "${workspaceFolder}/CharlibCore/bin/Debug/net461-min",
+      // "${workspaceFolder}/CharlibClasses/bin/Debug/net461",
+      "--addOrigin", 
+      "${workspaceFolder}/vendor",
+      "${workspaceFolder}/CharlibCore/resources/assets",
+      // "${workspaceFolder}/CharlibClasses/resources/assets"
     ],
     "console": "internalConsole",
     "internalConsoleOptions": "openOnSessionStart",
