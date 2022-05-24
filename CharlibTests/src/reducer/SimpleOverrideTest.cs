@@ -97,7 +97,7 @@ namespace Charlib.testing {
         CharlibMod.Logger.Debug("{0}",actualPd);
         
         Assert.That(actualPd, Is.Not.Null);
-        Assert.That(actualPd.Get(key.ReducerId), Is.EqualTo(val));
+        Assert.That(actualPd!.Get(key.ReducerId), Is.EqualTo(val));
 
       }
     }
@@ -125,7 +125,7 @@ namespace Charlib.testing {
         CharlibMod.Logger.Debug("{0}",actualPd);
         
         Assert.That(actualPd, Is.Not.Null);
-        Assert.That(actualPd.Get(key.ReducerId), Is.EqualTo(val));
+        Assert.That(actualPd!.Get(key.ReducerId), Is.EqualTo(val));
 
       }
     }

@@ -1,12 +1,17 @@
 using System;
 using Charlib.PlayerDict;
 using Charlib.PlayerDict.Reducer;
+using Charlib.PatchChain;
 
 namespace Charlib.PatchChain.Override {
   public interface IPatchOverrideTypeKey : IPatchTypeKey { 
     public object? ValueFromString(
       IStringConstructorRegistry reg,
       string valueAsString
+    );
+    public void Register(
+      IPlayerDictManager manager,
+      IPatchChainRegistry patchRegistry
     );
   }
   public interface IPatchOverrideTypeKey<V> 
@@ -87,40 +92,61 @@ namespace Charlib.PatchChain.Override {
     }
   }
   public static class IPatchOverrideTypeKeyImpl {
-    public class NonGeneric : IPatchOverrideTypeKey
-    {
-      public NonGeneric(
+    public class GenericFullyQualified<V>
+      : IPatchOverrideTypeKey, IPatchOverrideTypeKey<V> {
+      public GenericFullyQualified(
         string id, 
-        Type valueType,
-        Type contextType
+        Type? valueType = null,
+        Type? contextType = null
       ) {
         Id = id;
-        ValueType = valueType;
-        ContextType = contextType;
+        ValueType = valueType ?? typeof(V);
+        ContextType = contextType ?? typeof(IHasPlayer);
       }
       public string Id {get;}
       public Type ContextType {get;}
       public Type ValueType {get;}
-      public object? ValueFromString(
+      public void Register(
+        IPlayerDictManager manager,
+        IPatchChainRegistry patchRegistry
+      ) {
+        var pdRegistry = manager.DictKeyRegistry;
+        var reducerRegistry = manager.ReducerRegistry;
+        var pdKey = this.InferDictKey();
+        var reducerKey = this.InferReducerKey();
+        if (!pdRegistry.Has(pdKey))
+        {
+          pdRegistry.Register(pdKey);
+        }
+        if (!reducerRegistry.Has(reducerKey.ReducerId))
+        {
+          ReducerFacade.DefineReducer(
+            reducerRegistry, reducerKey, this.ApplyOverrideToPlayer<V>
+           );
+        }
+        var patchReg = patchRegistry.GetPatchChain(this)
+          !.HardCast<V, IHasPlayer>();
+        var fn = this
+          .ApplyOverrideUsingPatchContext(pdKey, pdRegistry)
+          .WithPriority(PatchChainFacade.PriorityLast);
+        if (!patchReg.HasFn(fn)) {
+          patchReg.Add(fn);
+        }
+      }
+      public V? ValueFromString(
         IStringConstructorRegistry reg, 
         string valueAsString
       ) {
-        return reg.ForType(ValueType)(valueAsString).AsNullable();
-      }
-    }
-    public class GenericFullyQualified<V>
-      : NonGeneric, IPatchOverrideTypeKey<V> {
-      public GenericFullyQualified(
-        string id, 
-        Type? valueType = null, 
-        Type? contextType = null
-      ) : base(id, valueType ?? typeof(V), contextType ?? typeof(IHasPlayer)) 
-      { }
-      public new V? ValueFromString(
-        IStringConstructorRegistry reg
-        , string valueAsString
-      ) {
         return reg.ForType<V>()(valueAsString).AsNullable();
+      }
+      public IPatchOverrideTypeKey AsPatchOverrideTypeKey() => this;
+      IPatchOverrideTypeKey<V> IPatchTypeKey.IValueAspect<V>
+        .AsPatchOverrideTypeKey() => this;
+      object? IPatchOverrideTypeKey.ValueFromString(
+        IStringConstructorRegistry reg,
+        string valueAsString
+      ) {
+        return reg.ForType(ValueType)(valueAsString).AsNullable();
       }
     }
   }

@@ -1,4 +1,5 @@
 using System;
+using Charlib.PatchChain.Override;
 
 namespace Charlib.PatchChain {
     public interface IPatchTypeKeyRaw {
@@ -7,6 +8,7 @@ namespace Charlib.PatchChain {
     public interface IPatchTypeKeyKind {
       public Type ContextType {get;}
       public Type ValueType {get;}
+      public IPatchOverrideTypeKey AsPatchOverrideTypeKey();
     }
     public interface IPatchTypeKey 
       : IPatchTypeKeyRaw
@@ -17,7 +19,9 @@ namespace Charlib.PatchChain {
       { }
       public interface IValueAspect<V> 
         : IPatchTypeKey
-      { }
+      { 
+        public new IPatchOverrideTypeKey<V> AsPatchOverrideTypeKey();
+      }
     }
     public interface IPatchTypeKey<V> 
       : IPatchTypeKey 
@@ -26,7 +30,8 @@ namespace Charlib.PatchChain {
     public interface IPatchTypeKey<V, in C> 
       : IPatchTypeKey<V>
       , IPatchTypeKey.IContextAspect<C>
-      , IDiscriminator<V> { }
+      , IDiscriminator<V> { 
+    }
     public static class PatchTypeKeyImpl {
       public class PatchTypeKeyWithValueAndContext<V,C,S> 
         : IPatchTypeKey<V, C> 
@@ -46,6 +51,13 @@ namespace Charlib.PatchChain {
           IPatchChainRegistry registry
         ) {
           registry.Declare(new S());
+        }
+        public IPatchOverrideTypeKey<V> AsPatchOverrideTypeKey() {
+          return PatchOverrideFacade.OverrideTypeKey(this);
+        }
+        IPatchOverrideTypeKey IPatchTypeKeyKind.AsPatchOverrideTypeKey()
+        {
+          return AsPatchOverrideTypeKey();
         }
       }
     }

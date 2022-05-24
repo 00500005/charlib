@@ -37,7 +37,8 @@ namespace Charlib {
     public ServerCommands(ICharlibState state, ICoreServerAPI serverAPI) 
     : base(state) {
       ServerAPI = serverAPI;
-      PatchOverrides = state.GetAllSupportedPatchOverrideKeys()
+      PatchOverrides = state.PatchChainRegistry
+        .GetPatchOverrideTypeKeys()
         .ToDictionary(
           d => d.Id.ToLower(), d => d
         );

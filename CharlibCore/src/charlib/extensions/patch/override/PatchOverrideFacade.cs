@@ -12,15 +12,6 @@ namespace Charlib.PatchChain.Override {
         patchKey.ContextType
       );
     }
-    public static IPatchOverrideTypeKey OverrideTypeKeyNonGeneric(
-      IPatchTypeKey patchKey
-    ) {
-      return new IPatchOverrideTypeKeyImpl.NonGeneric(
-        patchKey.Id,
-        patchKey.ValueType,
-        patchKey.ContextType
-      );
-    }
     public static void RegisterOverride<V>(
       IPatchOverrideTypeKey<V> overrideKey,
       IPlayerDictManager manager,
@@ -38,7 +29,7 @@ namespace Charlib.PatchChain.Override {
           reducerRegistry, reducerKey, overrideKey.ApplyOverrideToPlayer<V>
         );
       }
-      if (!patchRegistry.Has(overrideKey)) {
+      if (!patchRegistry.HasDeclared(overrideKey)) {
         patchRegistry.Register(
           overrideKey
             .ApplyOverrideUsingPatchContext(pdKey, pdRegistry)
@@ -46,6 +37,13 @@ namespace Charlib.PatchChain.Override {
           overrideKey
         );
       }
+    }
+    public static void RegisterOverrideNonGeneric(
+      IPatchOverrideTypeKey overrideKey,
+      IPlayerDictManager manager,
+      IPatchChainRegistry patchRegistry
+    ) {
+      overrideKey.Register(manager, patchRegistry);
     }
   }
 }

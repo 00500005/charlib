@@ -1,12 +1,14 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using Charlib.PatchChain.Override;
 
 namespace Charlib.PatchChain {
   public interface IPatchChainRegistry {
-    public bool Has(string rawKey);
-    public IPatchChainRegistration? GetPatchChain(string rawKey);
-    public IEnumerable<IPatchChainRegistration> GetPatchChains();
+    public bool HasDeclared(string rawKey);
+    public IPatchChainRegistrationCollection? GetPatchChain(string rawKey);
+    public IEnumerable<IPatchChainRegistrationCollection> GetPatchChains();
+    public IEnumerable<IPatchOverrideTypeKey> GetPatchOverrideTypeKeys();
     public void Register<V,C>(
       IHasPrioritizedChainFn<V,C> fn,
       IPatchTypeKey<V,C> key
@@ -22,11 +24,11 @@ namespace Charlib.PatchChain {
     ) where S : IPatchTypeKey<V,C>,new() {
       reg.Declare<V,C>(new S());
     }
-    public static bool Has(
+    public static bool HasDeclared(
       this IPatchChainRegistry registry,
       IPatchTypeKey key
     ) {
-      return registry.Has(key.Id);
+      return registry.HasDeclared(key.Id);
     }
     public static IEnumerable<IPatchTypeKey> GetPatchKeys(
       this IPatchChainRegistry registry
@@ -39,11 +41,14 @@ namespace Charlib.PatchChain {
     ) {
       return registry.GetPatchChain(id)?.Key;
     }
-    public static IPatchChainRegistration<V,C>? GetPatchChain<V,C>(
-      this IPatchChainRegistry registry,
-      IPatchTypeKey<V,C> key
-    ) {
-      return registry.GetPatchChain(key.Id) as IPatchChainRegistration<V,C>;
+    public static IPatchChainPrioritizedRegistrationCollection<V,C>?
+      GetPatchChain<V,C>(
+        this IPatchChainRegistry registry,
+        IPatchTypeKey<V,C> key
+      )
+    {
+      return registry.GetPatchChain(key.Id) 
+        as IPatchChainPrioritizedRegistrationCollection<V,C>;
     }
     public static V InvokeChain<V,C>(
       this IPatchChainRegistry registry,
@@ -75,13 +80,13 @@ namespace Charlib.PatchChain {
         var reg = Registry[key.Id].HardCast<V,C>();
         reg.Add(fn);
       }
-      public bool Has(string rawKey) {
+      public bool HasDeclared(string rawKey) {
         return Registry.ContainsKey(rawKey);
       }
-      public IPatchChainRegistration? GetPatchChain(string rawKey) {
+      public IPatchChainRegistrationCollection? GetPatchChain(string rawKey) {
         return Registry.ContainsKey(rawKey) ? Registry[rawKey] : null;
       }
-      public IEnumerable<IPatchChainRegistration> GetPatchChains() {
+      public IEnumerable<IPatchChainRegistrationCollection> GetPatchChains() {
         return Registry.Values;
       }
       public void Declare<V, C>(IPatchTypeKey<V, C> key)
@@ -93,6 +98,11 @@ namespace Charlib.PatchChain {
           "Declaring PatchChain {0} as {1}",
           key.Id, key.ValueType.FullName
         );
+      }
+
+      public IEnumerable<IPatchOverrideTypeKey> GetPatchOverrideTypeKeys()
+      {
+        return Registry.Values.Select(k => k.Key.AsPatchOverrideTypeKey());
       }
     }
   }

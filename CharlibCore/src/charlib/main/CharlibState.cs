@@ -25,22 +25,15 @@ namespace Charlib
     public PlayerSaveData? SaveData {get;set;}
   }
   public static class ICharlibStateExt {
-    public static IEnumerable<IPatchOverrideTypeKey> 
-      GetAllSupportedPatchOverrideKeys(
-        this ICharlibState state
-      ) 
-    {
-      return state.StringConstructorRegistry.SupportedTypes().SelectMany(
-        t => state.GetPatchOverrideKeys(t)
-      );
-    }
-    public static int RegisterPatchOverrides<V>(
+    public static int RegisterPatchOverrides(
       this ICharlibState state
     ) {
       int count = 0;
-      foreach(var key in state.GetPatchOverrideKeys<V>()) {
-        PatchOverrideFacade.RegisterOverride(
-          key,
+      foreach(
+        var key
+        in state.PatchChainRegistry.GetPatchOverrideTypeKeys()
+      ) {
+        key.Register(
           state.PlayerDictManager,
           state.PatchChainRegistry
         );
@@ -48,30 +41,6 @@ namespace Charlib
       }
       return count;
     }
-    public static IEnumerable<IPatchOverrideTypeKey> 
-      GetPatchOverrideKeys(
-        this ICharlibState state,
-        Type valueType
-      ) 
-    {
-      return state.PatchChainRegistry
-        .GetPatchChains()
-        .Where(reg => reg.Key.DoesAllowValue(valueType))
-        .Select(reg => PatchOverrideFacade.OverrideTypeKeyNonGeneric(reg.Key));
-    }
-    public static IEnumerable<IPatchOverrideTypeKey<V>> 
-      GetPatchOverrideKeys<V>(
-        this ICharlibState state
-      ) 
-    {
-      return state.PatchChainRegistry
-        .GetPatchChains()
-        .Where(reg => reg.Key.DoesAllowValue(typeof(V)))
-        .Select(reg => PatchOverrideFacade.OverrideTypeKey<V>(
-          (IPatchTypeKey<V>)reg.Key
-        ));
-    }
-
   }
   public interface IHasCharlibState : IHasGlobalContext<
     ICharlibState

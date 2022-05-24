@@ -1,6 +1,8 @@
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using Charlib.PatchChain.Override;
 
 namespace Charlib.PatchChain {
   public static class PatchChainRegistrationFacade {
@@ -20,12 +22,15 @@ namespace Charlib.PatchChain {
     public new IPatchTypeKey<V,C> Key {get;}
   }
   public interface IPatchChainRegistrationCollection 
-    : IPatchChainRegistration { }
+    : IPatchChainRegistration {
+      public int Length { get; }
+    }
   public interface IPatchChainPrioritizedRegistrationCollection<V,C> 
     : IPatchChainRegistrationCollection
     , IPatchChainRegistration<V,C> 
   {
     public void Add(IHasPrioritizedChainFn<V,C> fn);
+    public bool HasFn(IHasPrioritizedChainFn<V,C> fn);
   }
   public static class IPatchChainRegistrationImpl {
     public class PrioritizedListImpl<V,C>
@@ -41,6 +46,7 @@ namespace Charlib.PatchChain {
       public Type ContextType => typeof(C);
       IPatchTypeKey IPatchChainRegistration.Key => Key;
       ChainFn<V, C> IHasChainFn<V, C>.ChainFn => ChainFn;
+      public int Length => Fns.Count;
       private List<IHasPrioritizedChainFn<V,C>> Fns 
         = new List<IHasPrioritizedChainFn<V,C>>();
       public void Add(IHasPrioritizedChainFn<V,C> fn) {
@@ -54,6 +60,15 @@ namespace Charlib.PatchChain {
           nextT = resolver.ChainFn(c, nextT);
         }
         return nextT;
+      }
+      public bool HasFn(IHasPrioritizedChainFn<V, C> fn)
+      {
+        foreach(var chain in Fns){
+          if (Object.ReferenceEquals(chain.ChainFn, fn.ChainFn)){
+            return true;
+          };
+        }
+        return false;
       }
     }
   }

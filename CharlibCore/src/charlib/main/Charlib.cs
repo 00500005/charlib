@@ -62,10 +62,8 @@ namespace Charlib
       State.PatchChainRegistry.Declare(OvenCookingTime.TypeId);
       var declareCount = State.PatchChainRegistry.GetPatchChains().Count();
       Logger.Debug("Declared {0} patch keys", declareCount);
-      Logger.Debug("Registered {0} float patch keys"
-        , State.RegisterPatchOverrides<float>());
-      Logger.Debug("Registered {0} int patch keys"
-        , State.RegisterPatchOverrides<int>());
+      Logger.Debug("Registered {0} patch overrides"
+        , State.RegisterPatchOverrides());
     }
     private void DoHarmonyPatches() {
       var harmony = State!.Harmony;
