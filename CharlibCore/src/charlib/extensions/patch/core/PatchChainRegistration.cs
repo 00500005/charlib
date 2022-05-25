@@ -1,8 +1,6 @@
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using Charlib.PatchChain.Override;
 
 namespace Charlib.PatchChain {
   public static class PatchChainRegistrationFacade {

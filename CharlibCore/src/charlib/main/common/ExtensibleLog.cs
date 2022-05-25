@@ -1,5 +1,4 @@
 using System;
-using Vintagestory.API.Common;
 
 namespace Charlib {
   public delegate void ExtensibleLogOutput<in P>(P? param, string msg);

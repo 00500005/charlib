@@ -1,6 +1,5 @@
 
 using System.Collections.Generic;
-using System.IO;
 using ProtoBuf;
 using Vintagestory.API.Common;
 

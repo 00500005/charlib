@@ -1,13 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-using Vintagestory.API.Common;
 using Charlib.PatchChain;
-using Charlib.PlayerDict;
 using Charlib.Mocks;
-using Charlib.PlayerDict.Reducer;
-using Charlib.PatchChain.Override;
 using NUnit.Framework;
-using System;
 
 namespace Charlib.testing {
   [TestFixture]

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Vintagestory.API.Common;
 using Charlib.PatchChain;
 using Charlib.PlayerDict;

@@ -1,8 +1,5 @@
 using Vintagestory.API.Common;
-using Vintagestory.Common;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
-using System;
 
 namespace Charlib.PatchChain {
   public interface IHasPlayer {

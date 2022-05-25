@@ -1,15 +1,8 @@
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 using HarmonyLib;
-using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using System.Linq;
-using Vintagestory.API.Server;
 using Charlib.PatchChain;
 using Charlib.PlayerDict;
-using Charlib.PatchChain.Override;
 
 namespace Charlib
 {

@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.IO;
-using ProtoBuf;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Common;
 

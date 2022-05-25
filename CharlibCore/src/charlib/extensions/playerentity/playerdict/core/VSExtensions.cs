@@ -1,6 +1,5 @@
 using Charlib.PlayerDict;
 using Vintagestory.API.Common;
-using Vintagestory.API.MathTools;
 
 namespace Charlib {
   public static partial class VSExtensions {

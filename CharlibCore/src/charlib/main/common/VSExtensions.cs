@@ -1,4 +1,3 @@
-using Charlib.PlayerDict;
 using Vintagestory.API.Common;
 using Vintagestory.API.Client;
 using Vintagestory.API.MathTools;

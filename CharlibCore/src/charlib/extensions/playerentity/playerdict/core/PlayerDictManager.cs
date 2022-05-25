@@ -1,16 +1,12 @@
 
 using System;
-// using System.Linq;
-using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 using Vintagestory.API.Client;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Charlib.PlayerDict.Reducer;
 using System.Linq;
-using System.Diagnostics;
 
 namespace Charlib.PlayerDict {
   public delegate void PlayerDictUpdateSettledCallbackFn(

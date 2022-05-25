@@ -1,7 +1,6 @@
 using System;
 using Charlib.PlayerDict;
 using Charlib.PlayerDict.Reducer;
-using Charlib.PatchChain;
 
 namespace Charlib.PatchChain.Override {
   public interface IPatchOverrideTypeKey : IPatchTypeKey { 

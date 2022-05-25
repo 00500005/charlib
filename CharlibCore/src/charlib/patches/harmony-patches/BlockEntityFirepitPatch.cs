@@ -1,8 +1,5 @@
 
-using System.Collections.Generic;
 using HarmonyLib;
-using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
 using Charlib.PatchChain;
 
