@@ -2,7 +2,7 @@ using Charlib.PlayerDict;
 using Charlib.PlayerDict.Reducer;
 
 namespace Charlib.PatchChain.Override {
-  public static partial class PatchOverrideFacade {
+  public static class PatchOverrideFacade {
     public static IPatchOverrideTypeKey<V> OverrideTypeKey<V>(
       IPatchTypeKey<V> patchKey
     ) {
@@ -33,7 +33,7 @@ namespace Charlib.PatchChain.Override {
         patchRegistry.Register(
           overrideKey
             .ApplyOverrideUsingPatchContext(pdKey, pdRegistry)
-            .WithPriority(PatchChainFacade.PriorityLast),
+            .WithPriority(PatchFacade.PriorityLast),
           overrideKey
         );
       }

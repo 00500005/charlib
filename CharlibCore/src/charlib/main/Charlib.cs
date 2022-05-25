@@ -4,14 +4,12 @@ using Vintagestory.API.Common;
 using System.Linq;
 using Vintagestory.API.Config;
 using System.IO;
+using Charlib.PatchChain;
+using Charlib.PlayerDict.Reducer;
+using Charlib.PlayerDict;
 
 namespace Charlib
 {
-  using Charlib.PatchChain;
-  using Charlib.PatchChain.Key;
-  using Charlib.PatchChain.Override;
-  using Charlib.PlayerDict.Reducer;
-  using PlayerDict;
   public class CharlibMod 
     : StatefulMod<ICharlibState, CharlibMod, VsLogParams>
     , IVsLog

@@ -1,38 +1,42 @@
+using Charlib.PatchChain;
+/**
+  * TODO: figure out a better way to group like keys
+  * *OR* enforce sorting in this file
+  */
 
-namespace Charlib.PatchChain.Key
-{
+namespace Charlib {
   using FirepitContext = global::Charlib.PatchChain.PlayerAndBlockEntity;
   using OvenContext = global::Charlib.PatchChain.PlayerAndBlockEntity;
   public sealed class FirepitCookingTime 
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, FirepitContext, FirepitCookingTime
     > { }
   public sealed class OvenCookingTime
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, OvenContext, OvenCookingTime
     > {}
   public sealed class FirepitCookingPotCapacityLiters
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, FirepitContext, FirepitCookingPotCapacityLiters
     > {}
   public sealed class FirepitCookingPotStackSize
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       int, FirepitContext, FirepitCookingPotStackSize
     > {}
   public sealed class FirepitBurnChance
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, FirepitContext, FirepitBurnChance
     > {}
   public sealed class OvenBurnChance
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, OvenContext, OvenBurnChance
     > {}
   public sealed class FirepitBonusFoodChance
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, FirepitContext, FirepitBonusFoodChance
     > {}
   public sealed class OvenBonusFoodChance
-    : PatchTypeKeyImpl.PatchTypeKeyWithValueAndContext<
+    : PatchFacade.PatchTypeKey<
       float, OvenContext, OvenBonusFoodChance
     > {}
 }

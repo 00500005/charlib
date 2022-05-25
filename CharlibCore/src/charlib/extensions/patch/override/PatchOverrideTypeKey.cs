@@ -129,7 +129,7 @@ namespace Charlib.PatchChain.Override {
           !.AsDeclarable<V,IHasPlayer>();
         var fn = this
           .ApplyOverrideUsingPatchContext(pdKey, pdRegistry)
-          .WithPriority(PatchChainFacade.PriorityLast);
+          .WithPriority(PatchFacade.PriorityLast);
         if (!patchReg.HasFn(fn)) {
           patchReg.Add(fn);
         }

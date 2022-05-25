@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using Vintagestory.API.Common;
 using Charlib.PatchChain;
-using Charlib.PatchChain.Key;
 using Charlib.PlayerDict;
 using Charlib.Mocks;
 using Charlib.PlayerDict.Reducer;

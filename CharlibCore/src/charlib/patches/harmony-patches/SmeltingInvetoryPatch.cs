@@ -2,7 +2,6 @@
 using System;
 using System.Reflection;
 using Charlib.PatchChain;
-using Charlib.PatchChain.Key;
 using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.GameContent;

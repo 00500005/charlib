@@ -16,7 +16,7 @@ namespace Charlib {
       ref BlockEntityFirepit __instance, 
       ref float __result
     ) {
-      __result = new PatchChain.Key.FirepitCookingTime()
+      __result = new FirepitCookingTime()
         .ApplyPatchChain(PlayerAndBlockEntity.FromBlockEntity(
           __instance, LastPlayerBEB.GetLastModifyingPlayer
         ), __result);

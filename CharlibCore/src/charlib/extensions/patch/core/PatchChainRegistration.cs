@@ -6,7 +6,7 @@ using Charlib.PatchChain.Override;
 
 namespace Charlib.PatchChain {
   public static class PatchChainRegistrationFacade {
-    public static IPatchChainRegistrationCollection<V,C,C> Empty<V,C>(
+    public static IPatchChainRegistrationCollectionInput<V,C> Empty<V,C>(
       IPatchTypeKey<V,C> key
     ) {
       return new IPatchChainRegistrationImpl.PrioritizedListImpl<V,C>(key);
@@ -40,16 +40,10 @@ namespace Charlib.PatchChain {
     public void Add(IHasPrioritizedChainFn<V,C_OUT> fn);
     public bool HasFn(IHasPrioritizedChainFn<V,C_OUT> fn);
   }
-  public interface IPatchChainRegistrationCollection<
-    V, in C_IN, out C_OUT
-  > : IPatchChainRegistrationCollection
-    , IPatchChainRegistrationCollectionInput<V,C_OUT>
-    , IPatchChainRegistration<V,C_IN,C_OUT> 
-    where C_IN : C_OUT
-  { }
   public static class IPatchChainRegistrationImpl {
     public class PrioritizedListImpl<V,C>
-      : IPatchChainRegistrationCollection<V,C,C>
+      : IPatchChainRegistrationCollection<V,C>
+      , IPatchChainRegistrationCollectionInput<V,C>
     {
       internal PrioritizedListImpl(
         IPatchTypeKey<V,C> key
