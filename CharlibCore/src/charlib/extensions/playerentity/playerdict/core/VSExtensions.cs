@@ -10,7 +10,7 @@ namespace Charlib {
     ) {
       IPlayerDict? pd = player.Entity.GetBehavior<PlayerDictEntity>();
       if (pd == null) {
-        pd = PlayerDictFacade.CreateAndRegister(player, registry);
+        pd = PlayerDictFacade.CreateAndRegisterPlayerDict(player, registry);
       }
       return pd;
     }

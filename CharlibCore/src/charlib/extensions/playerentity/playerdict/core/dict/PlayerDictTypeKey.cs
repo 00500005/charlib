@@ -54,7 +54,11 @@ namespace Charlib {
         }
         if (!self.ValueType.IsAssignableTo<V>()) {
           throw new InvalidCastException(
-            $"Cannot cast IDictKey of {self.ValueType.Name} to {typeof(V).Name}"
+            $@"Cannot cast TypeKey {
+              self.Id
+            } with [ValueType = {
+              self.ValueType.FullName
+            }] to a key with [ValueType = {typeof(V).FullName}]"
           );
         }
         return IPlayerDictTypeKeyImpl.Create(

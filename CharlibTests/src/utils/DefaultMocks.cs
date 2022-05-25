@@ -275,7 +275,7 @@ namespace Charlib.Mocks {
       IPlayerDictTypeKeyRegistry registry
     ) {
       Dict.ResolveWithValue(() => {
-        var implDict = PlayerDictFacade.CreateAndRegister(
+        var implDict = PlayerDictFacade.CreateAndRegisterPlayerDict(
           this.Object, registry);
         Entity.Setup(p => p.GetBehavior<PlayerDictEntity>())
           .Returns(implDict);

@@ -79,22 +79,24 @@ namespace Charlib.PlayerDict {
       this IPlayerDictTypeKeyRegistry reg,
       IPlayerDictKeyId key,
       IDiscriminator<V>? _ = null
-    ) where V : class {
+    ) {
       return reg.Get(key.Id).Cast<V>();
     }
     public static IPlayerDictTypeKey<V> Get<V>(
       this IPlayerDictTypeKeyRegistry reg,
       string key,
       IDiscriminator<V>? _ = null
-    ) where V : class {
+    ) {
       return reg.Get(key).Cast<V>();
     }
-    public static void Register<V>(
+    public static IPlayerDictTypeKey<V> Register<V>(
       this IPlayerDictTypeKeyRegistry reg,
       string? id = null,
       IDiscriminator<V>? _ = null
-    ) where V : class {
-      reg.Register(IPlayerDictTypeKeyImpl.Create(id, _));
+    ) {
+      var key = IPlayerDictTypeKeyImpl.Create(id, _);
+      reg.Register(key);
+      return key;
     }
   }
 }

@@ -20,8 +20,15 @@ namespace Charlib.PlayerDict {
           throw new NotImplementedException();
       }
     }
+    public static IPlayerDictTypeKey<V> CreateTypeKey<V>(
+      IPlayerDictTypeKeyRegistry reg,
+      string? id = null,
+      IDiscriminator<V>? _ = null
+    ) {
+      return IPlayerDictTypeKeyImpl.Create(id, _);
+    }
 
-    public static PlayerDictEntity CreateAndRegister(
+    public static PlayerDictEntity CreateAndRegisterPlayerDict(
       IPlayer player,
       IPlayerDictTypeKeyRegistry registry
     ) {
