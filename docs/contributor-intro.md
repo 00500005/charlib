@@ -1,6 +1,9 @@
 <span id="top"></span>
-Get started with [how to build](#how-to-build)
-Looking for an overview of the system? Checkout our [dev walkthrough](#dev-walkthrough)
+Get started with [how to build](#how-to-build).
+
+Looking how to run or add tests? See our [testing guidelines](core/testing.md).
+
+Looking for an overview of the system? Checkout our [dev walkthrough](#dev-walkthrough).
 
 # How to build
 
