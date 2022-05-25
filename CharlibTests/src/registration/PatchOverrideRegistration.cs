@@ -20,18 +20,18 @@ namespace Charlib.testing {
         game.PatchChainRegistry.Declare(FirepitCookingTime.TypeId);
         // assert preconditions
         Assert.That(
-          game.PatchChainRegistry.GetPatchChain(patchKey.Id),
+          game.PatchChainRegistry.GetPatchChainNonGeneric(patchKey.Id),
           Is.Not.Null);
         Assert.That(
-          game.PatchChainRegistry.GetPatchChain(patchKey.Id)!.Length,
+          game.PatchChainRegistry.GetPatchChainNonGeneric(patchKey.Id)!.Length,
           Is.EqualTo(0));
         Assert.False(game.DictKeyRegistry.Has(patchKey.Id));
 
         var numberRegistered = game.State.RegisterPatchOverrides();
         Assert.That(numberRegistered, Is.EqualTo(1));
 
-        var patchRegistration
-          = game.PatchChainRegistry.GetPatchChain(patchKey.Id);
+        var patchRegistration 
+          = game.PatchChainRegistry.GetPatchChainNonGeneric(patchKey.Id);
         Assert.That(patchRegistration, Is.Not.Null);
         Assert.That(patchRegistration!.Length, Is.EqualTo(1));
         Assert.That(patchRegistration.Key.ValueType,

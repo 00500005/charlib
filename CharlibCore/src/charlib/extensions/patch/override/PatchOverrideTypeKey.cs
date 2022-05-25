@@ -124,8 +124,9 @@ namespace Charlib.PatchChain.Override {
             reducerRegistry, reducerKey, this.ApplyOverrideToPlayer<V>
            );
         }
-        var patchReg = patchRegistry.GetPatchChain(this)
-          !.HardCast<V, IHasPlayer>();
+        patchRegistry.Declare(this);
+        var patchReg = patchRegistry.GetPatchChainDeclaration(this)
+          !.AsDeclarable<V,IHasPlayer>();
         var fn = this
           .ApplyOverrideUsingPatchContext(pdKey, pdRegistry)
           .WithPriority(PatchChainFacade.PriorityLast);

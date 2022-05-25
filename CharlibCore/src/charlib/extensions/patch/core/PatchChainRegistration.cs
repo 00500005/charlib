@@ -6,7 +6,7 @@ using Charlib.PatchChain.Override;
 
 namespace Charlib.PatchChain {
   public static class PatchChainRegistrationFacade {
-    public static IPatchChainPrioritizedRegistrationCollection<V,C> Empty<V,C>(
+    public static IPatchChainRegistrationCollection<V,C,C> Empty<V,C>(
       IPatchTypeKey<V,C> key
     ) {
       return new IPatchChainRegistrationImpl.PrioritizedListImpl<V,C>(key);
@@ -15,26 +15,41 @@ namespace Charlib.PatchChain {
   public interface IPatchChainRegistration {
     public IPatchTypeKey Key {get;}
   }
-  public interface IPatchChainRegistration<V,in C> 
-    : IPatchChainRegistration 
-    , IHasChainFn<V,C>
-  {
-    public new IPatchTypeKey<V,C> Key {get;}
-  }
   public interface IPatchChainRegistrationCollection 
-    : IPatchChainRegistration {
-      public int Length { get; }
-    }
-  public interface IPatchChainPrioritizedRegistrationCollection<V,C> 
-    : IPatchChainRegistrationCollection
-    , IPatchChainRegistration<V,C> 
-  {
-    public void Add(IHasPrioritizedChainFn<V,C> fn);
-    public bool HasFn(IHasPrioritizedChainFn<V,C> fn);
+    : IPatchChainRegistration 
+  { 
+    public int Length { get; }
   }
+  public interface IPatchChainRegistration<V,in C_IN> 
+    : IPatchChainRegistration 
+    , IHasChainFn<V, C_IN> { }
+  public interface IPatchChainRegistration<V,in C_IN,out C_OUT> 
+    : IPatchChainRegistration<V, C_IN>
+    where C_IN : C_OUT
+  {
+    public new IPatchTypeKey<V,C_OUT> Key {get;}
+  }
+  public interface IPatchChainRegistrationCollection<
+    V, in C_IN
+  > : IPatchChainRegistrationCollection
+    , IPatchChainRegistration<V,C_IN> 
+  { }
+  public interface IPatchChainRegistrationCollectionInput<
+    V, out C_OUT
+  > : IPatchChainRegistrationCollection {
+    public void Add(IHasPrioritizedChainFn<V,C_OUT> fn);
+    public bool HasFn(IHasPrioritizedChainFn<V,C_OUT> fn);
+  }
+  public interface IPatchChainRegistrationCollection<
+    V, in C_IN, out C_OUT
+  > : IPatchChainRegistrationCollection
+    , IPatchChainRegistrationCollectionInput<V,C_OUT>
+    , IPatchChainRegistration<V,C_IN,C_OUT> 
+    where C_IN : C_OUT
+  { }
   public static class IPatchChainRegistrationImpl {
     public class PrioritizedListImpl<V,C>
-      : IPatchChainPrioritizedRegistrationCollection<V,C>
+      : IPatchChainRegistrationCollection<V,C,C>
     {
       internal PrioritizedListImpl(
         IPatchTypeKey<V,C> key
@@ -73,13 +88,21 @@ namespace Charlib.PatchChain {
     }
   }
   public static class IPatchChainRegistrationExt {
-    public static IPatchChainPrioritizedRegistrationCollection<V,C> HardCast<
+    public static IPatchChainRegistrationCollectionInput<V,C> AsDeclarable<
       V,C
     >(
       this IPatchChainRegistrationCollection self,
       IDiscriminator<V, C>? _ = null
     ) {
-      return (IPatchChainPrioritizedRegistrationCollection<V,C>)(self);
+      return (IPatchChainRegistrationCollectionInput<V,C>)(self);
+    }
+    public static IPatchChainRegistrationCollection<V,C> AsInvocable<
+      V,C
+    >(
+      this IPatchChainRegistrationCollection self,
+      IDiscriminator<V, C>? _ = null
+    ) {
+      return (IPatchChainRegistrationCollection<V,C>)(self);
     }
   }
 }

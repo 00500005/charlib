@@ -14,7 +14,7 @@ namespace Charlib.PatchChain {
       : IPatchTypeKeyRaw
       , IPatchTypeKeyKind 
     {
-      public interface IContextAspect<in C> 
+      public interface IContextAspect<out C> 
         : IPatchTypeKey
       { }
       public interface IValueAspect<V> 
@@ -27,18 +27,18 @@ namespace Charlib.PatchChain {
       : IPatchTypeKey 
       , IPatchTypeKey.IValueAspect<V>
       , IDiscriminator<V> { }
-    public interface IPatchTypeKey<V, in C> 
+    public interface IPatchTypeKey<V, out C> 
       : IPatchTypeKey<V>
       , IPatchTypeKey.IContextAspect<C>
       , IDiscriminator<V> { 
     }
     public static class PatchTypeKeyImpl {
-      public class PatchTypeKeyWithValueAndContext<V,C,S> 
+      public class PatchTypeKeyWithValueAndContext<V,C,SELF> 
         : IPatchTypeKey<V, C> 
-        where S : PatchTypeKeyWithValueAndContext<V,C,S>, new()
+        where SELF : PatchTypeKeyWithValueAndContext<V,C,SELF>, new()
       {
-        public static IDiscriminator<V,C,S> TypeId 
-          = Discriminator.Identify<V,C,S>();
+        public static IDiscriminator<V,C,SELF> TypeId 
+          = Discriminator.Identify<V,C,SELF>();
         public PatchTypeKeyWithValueAndContext(string? id = null) {
           this.Id = id == null ? this.GetType().Name : id;
           this.ValueType = typeof(V);
@@ -50,7 +50,12 @@ namespace Charlib.PatchChain {
         public static void Declare(
           IPatchChainRegistry registry
         ) {
-          registry.Declare(new S());
+          registry.Declare(new SELF());
+        }
+        public override string ToString() {
+          return $@"PatchKey {Id} [V = {ValueType.FullName}] [C = {
+            ContextType.FullName
+          }]";
         }
         public IPatchOverrideTypeKey<V> AsPatchOverrideTypeKey() {
           return PatchOverrideFacade.OverrideTypeKey(this);
