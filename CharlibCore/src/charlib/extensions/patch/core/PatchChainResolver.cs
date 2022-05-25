@@ -7,7 +7,6 @@ namespace Charlib.PatchChain {
     public ChainFn<V, C> ChainFn {get;}
   }
   public static class ChainFnExt {
-    static object? val = default(Nullable<int>);
     public static ChainFn<V, C> AsChainFn<V, C>(
       this IHasChainFn<V, C> self
     ) {

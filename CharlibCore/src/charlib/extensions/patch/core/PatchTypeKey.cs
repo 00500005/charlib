@@ -67,37 +67,6 @@ namespace Charlib.PatchChain {
       }
     }
     public static class IPatchTypeKeyExt {
-      public static bool DoesAllowValue(
-        this IPatchTypeKey self,
-        Type ValueType
-      ) {
-        return self.ValueType.IsAssignableFrom(ValueType)
-          && self.ValueType.IsAssignableTo(ValueType);
-      }
-      public static bool DoesAllowValue<V>(
-        this IPatchTypeKey self,
-        IDiscriminator<V>? _ = null
-      ) {
-        return self.DoesAllowValue(typeof(V));
-      }
-      public static bool DoesAllowContext<C>(
-        this IPatchTypeKey self,
-        IDiscriminator<C>? _ = null
-      )  {
-        return self.ContextType.IsAssignableFrom<C>();
-      }
-      public static bool DoesAllow<V,C>(
-        this IPatchTypeKey self,
-        IDiscriminator<V,C>? _ = null
-      )  {
-        // Chainable function must both:
-        // accept V (isAssignableFrom V)
-        //  (as a parameter) *and*
-        // return a viable V (isAssignableTo V)
-        return self.ValueType.IsAssignableFrom<V>()
-          && self.ValueType.IsAssignableTo<V>()
-          && self.ContextType.IsAssignableFrom<C>();
-      }
       public static T ApplyPatchChain<T,C>(
         this IPatchTypeKey<T,C> key,
         C context,
