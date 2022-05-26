@@ -15,7 +15,9 @@ namespace Charlib {
   public interface IOptional : IHasValue { 
     public object? _InternalValue {get;}
   }
-  public interface IOptional<out V> : IOptional, IHasValue { 
+  public interface IOptional<out V> 
+    : IOptional, IHasValue
+  { 
     public new V _InternalValue {get;}
   }
   public static class Optional {
@@ -54,13 +56,11 @@ namespace Charlib {
     public static V? AsNullable<V>(
       this IOptional<V> value
     ) {
-      CharlibMod.Logger.Debug("AsNullable: {0} [{1}]", value, typeof(V));
       return value.HasValue ? value._InternalValue : default(V);
     }
     public static object? AsNullable(
       this IOptional value
     ) {
-      CharlibMod.Logger.Debug("AsNullable: {0}", value);
       return value.HasValue ? value._InternalValue : (object?)null;
     }
   }

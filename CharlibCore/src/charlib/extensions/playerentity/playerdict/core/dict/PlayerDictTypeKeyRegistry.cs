@@ -3,13 +3,21 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Charlib.PlayerDict {
+namespace Charlib {
+  using Charlib.PlayerDict;
   public interface IPlayerDictTypeKeyRegistry {
     public IEnumerable<IPlayerDictTypeKey> Keys();
     public bool Has(string id);
-    public IPlayerDictTypeKey Get(string key);
-    public void Register(IPlayerDictTypeKey key);
+    /** 
+      * Whenever possible, type'd version of get and declare should be used
+      * (see extension methods below)
+      */
+    internal IPlayerDictTypeKey Get(string key);
+    internal void Declare(IPlayerDictTypeKey key);
   }
+}
+
+namespace Charlib.PlayerDict {
   public static class IPlayerDictTypeKeyRegistryImpl {
     public class Impl : IPlayerDictTypeKeyRegistry
     {
@@ -22,7 +30,7 @@ namespace Charlib.PlayerDict {
       public bool Has(string id) {
         return _keys.ContainsKey(id);
       }
-      public void Register(IPlayerDictTypeKey keyToAdd)
+      public void Declare(IPlayerDictTypeKey keyToAdd)
       {
         string id = keyToAdd.Id;
         if (_keys.ContainsKey(id)) {
@@ -51,51 +59,17 @@ namespace Charlib.PlayerDict {
     }
   }
   public static class IPlayerDictTypeKeyRegistryExts {
-    public static bool Has(
+    public static IPlayerDictTypeKey<V>? MaybeGet<V>(
       this IPlayerDictTypeKeyRegistry reg,
-      IPlayerDictTypeKey key
+      IPlayerDictTypeKey<V> key
     ) {
-      return reg.Has(key.Id);
+      return reg.Has(key.Id) ? reg.Get(key.Id).Cast<V>() : null;
     }
-    public static IEnumerable<IPlayerDictTypeKey> KeysWithType(
+    public static IPlayerDictTypeKey<V> Declare<V>(
       this IPlayerDictTypeKeyRegistry reg,
-      Type type
+      IPlayerDictTypeKey<V> key
     ) {
-      return reg.Keys().Where(key => type.IsAssignableFrom(key.ValueType));
-    }
-    public static IPlayerDictTypeKey? KeyWithType(
-      this IPlayerDictTypeKeyRegistry reg,
-      Type type
-    ) {
-      return reg.KeysWithType(type).First();
-    }
-    public static IPlayerDictTypeKey Get(
-      this IPlayerDictTypeKeyRegistry reg,
-      IPlayerDictKeyId key
-    ) {
-      return reg.Get(key.Id);
-    }
-    public static IPlayerDictTypeKey<V> Get<V>(
-      this IPlayerDictTypeKeyRegistry reg,
-      IPlayerDictKeyId key,
-      IDiscriminator<V>? _ = null
-    ) {
-      return reg.Get(key.Id).Cast<V>();
-    }
-    public static IPlayerDictTypeKey<V> Get<V>(
-      this IPlayerDictTypeKeyRegistry reg,
-      string key,
-      IDiscriminator<V>? _ = null
-    ) {
-      return reg.Get(key).Cast<V>();
-    }
-    public static IPlayerDictTypeKey<V> Register<V>(
-      this IPlayerDictTypeKeyRegistry reg,
-      string? id = null,
-      IDiscriminator<V>? _ = null
-    ) {
-      var key = IPlayerDictTypeKeyImpl.Create(id, _);
-      reg.Register(key);
+      reg.Declare(key);
       return key;
     }
   }

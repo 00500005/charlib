@@ -26,19 +26,18 @@ namespace Charlib.PatchChain {
     public interface IPatchTypeKey<V> 
       : IPatchTypeKey 
       , IPatchTypeKey.IValueAspect<V>
-      , IDiscriminator<V> { }
+      {}
     public interface IPatchTypeKey<V, out C> 
       : IPatchTypeKey<V>
-      , IPatchTypeKey.IContextAspect<C>
-      , IDiscriminator<V> { 
+      , IPatchTypeKey.IContextAspect<C> { 
     }
     public static class PatchTypeKeyImpl {
       public class PatchTypeKeyWithValueAndContext<V,C,SELF> 
         : IPatchTypeKey<V, C> 
         where SELF : PatchTypeKeyWithValueAndContext<V,C,SELF>, new()
       {
-        public static IDiscriminator<V,C,SELF> TypeId 
-          = Discriminator.Identify<V,C,SELF>();
+        public static PatchTypeKeyWithValueAndContext<V,C,SELF> TypeId 
+          = new SELF();
         public PatchTypeKeyWithValueAndContext(string? id = null) {
           this.Id = id == null ? this.GetType().Name : id;
           this.ValueType = typeof(V);

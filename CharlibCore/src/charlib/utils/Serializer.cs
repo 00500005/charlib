@@ -19,7 +19,7 @@ namespace Charlib {
   public interface ISerializable<USER_TYPE,out SELF_TYPE,in DEPS> 
     : ISerializableSerializeAspect<USER_TYPE, SELF_TYPE>
     , ISerializableDeserializeAspect<USER_TYPE, DEPS>
-    where SELF_TYPE : ISerializable<USER_TYPE,SELF_TYPE,DEPS>, new() { }
+    where SELF_TYPE : ISerializable<USER_TYPE,SELF_TYPE,DEPS> { }
   public interface ISerializable<USER_TYPE,out SELF_TYPE> 
     : ISerializable<USER_TYPE, SELF_TYPE, NoDeps>
     where SELF_TYPE : ISerializable<USER_TYPE,SELF_TYPE, NoDeps>, new() { }

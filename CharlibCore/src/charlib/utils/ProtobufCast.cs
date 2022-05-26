@@ -25,7 +25,7 @@ namespace Charlib {
     }
     public static T DeserializeProto<T>(
       this byte[] self
-    ) where T : class {
+    ) {
       using(var stream = new MemoryStream(self)) {
         return Serializer.Deserialize<T>(stream);
       }

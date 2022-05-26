@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Charlib.PlayerDict.Reducer {
   public delegate V? Reducer<out V, in M>(
@@ -107,6 +108,23 @@ namespace Charlib.PlayerDict.Reducer {
       ) {
         var s = serializedMessage.MsgData.DeserializeProto<S>();
         return s.AsValue(standardDeps);
+      }
+      public override bool Equals(object obj)
+      {
+        var casted = obj as IPlayerDictReducerDefinition<V,M,S>;
+        if (casted == null) {
+          return this == null;
+        }
+        return casted.Reducer.Equals(this.Reducer) 
+          && casted.ReducerKey.Equals(this.ReducerKey);
+      }
+
+      public override int GetHashCode()
+      {
+        int hashCode = -1999271580;
+        hashCode = hashCode * -1521134295 + EqualityComparer<Reducer<V, M>>.Default.GetHashCode(Reducer);
+        hashCode = hashCode * -1521134295 + EqualityComparer<IPlayerDictReducerTypeKey<V, M, S>>.Default.GetHashCode(ReducerKey);
+        return hashCode;
       }
     }
   }

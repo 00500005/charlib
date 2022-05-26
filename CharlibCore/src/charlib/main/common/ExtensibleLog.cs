@@ -85,8 +85,7 @@ namespace Charlib {
   }
   public static class IExtensibleParamsExt {
     public static V Cast<V>(
-      this IExtensibleParams p,
-      IDiscriminator<V>? _ = null
+      this IExtensibleParams p
     ) where V : IExtensibleParams,new() {
       if (p.GetType().IsAssignableTo<V>()) {
         return (V)p;

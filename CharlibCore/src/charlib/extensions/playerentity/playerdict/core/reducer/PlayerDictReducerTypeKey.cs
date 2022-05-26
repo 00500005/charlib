@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 
 namespace Charlib.PlayerDict.Reducer {
+  using SerializeDeps = IPlayerDictReducerMessageStandardDependencies;
   public interface IPlayerDictReducerIdAspect {
     public string ReducerId {get;}
   }
@@ -18,11 +20,18 @@ namespace Charlib.PlayerDict.Reducer {
     public Type MessageSerializedType {get;}
   }
   public interface IPlayerDictReducerMessageSerializerTypeKey<
-      M, S
+      in M, S
     > : IPlayerDictReducerIdAspect 
     , IPlayerDictReducerKindAspect 
     , IPlayerDictReducerMessageSerializationAspect 
-    where S : class, ISerializableSerializeAspect<M, S>, new() { }
+    where S : ISerializableSerializeAspect<M, S> { }
+  public interface IPlayerDictReducerMessageDeserializerTypeKey<
+      out M,S
+    > 
+    : IPlayerDictReducerIdAspect 
+    , IPlayerDictReducerKindAspect 
+    , IPlayerDictReducerMessageSerializationAspect 
+    where S : ISerializableDeserializeAspect<M, SerializeDeps> { }
   public interface IPlayerDictReducerTypeKey
     : IPlayerDictReducerIdAspect
     , IPlayerDictReducerKindAspect
@@ -37,36 +46,15 @@ namespace Charlib.PlayerDict.Reducer {
     , IPlayerDictReducerMessageAspect {}
   public interface IPlayerDictReducerTypeKey<out V, M, S>
     : IPlayerDictReducerTypeKey<V, M>
-    , IPlayerDictReducerMessageSerializerTypeKey<M,S>
-    where S : class, ISerializable<M, S
-      , IPlayerDictReducerMessageStandardDependencies
-    >, new() {}
+    , IPlayerDictReducerMessageSerializerTypeKey<M, S>
+    , IPlayerDictReducerMessageDeserializerTypeKey<M, S>
+    where S : ISerializable<M, S, SerializeDeps> {}
   public static class IPlayerDictReducerTypeKeyExt {
-    public static bool DoesAllowMessage<M>(
-      this IPlayerDictReducerTypeKey key,
-      IDiscriminator<M>? _ = null
-    ) {
-      return key.MessageType.IsAssignableFrom<M>();
-    }
-    public static bool DoesAllowMessage(
-      this IPlayerDictReducerTypeKey key,
-      Type messageType
-    ) {
-      return key.MessageType.IsAssignableFrom(messageType);
-    }
-    public static bool DoesAllowValue<V>(
-      this IPlayerDictReducerTypeKey key,
-      IDiscriminator<V>? _ = null
-    ) {
-      return key.ResultValueType.IsAssignableTo<V>();
-    }
   }
   public static class IPlayerDictReducerTypeKeyImpl {
     public class GenericFullyQualified<V,M,S> 
       : IPlayerDictReducerTypeKey<V, M, S> 
-      where S : class, ISerializable<M,S
-        , IPlayerDictReducerMessageStandardDependencies
-      >, new()
+      where S : ISerializable<M, S, SerializeDeps>
     {
       public GenericFullyQualified(
         string reducerId,
@@ -84,6 +72,31 @@ namespace Charlib.PlayerDict.Reducer {
       public Type ResultValueType => typeof(V);
       public Type MessageType => typeof(M);
       public Type MessageSerializedType => typeof(S);
+      public override bool Equals(object obj) {
+        var casted = obj as IPlayerDictReducerTypeKey<V, M, S>;
+        if (casted == null) {
+          return this == null;
+        }
+        return ReducerId == casted.ReducerId
+          && ResultId == casted.ResultId
+          && Kind == casted.Kind
+          && ResultValueType == casted.ResultValueType
+          && MessageType == casted.MessageType
+          && MessageSerializedType == casted.MessageSerializedType;
+
+      }
+
+      public override int GetHashCode()
+      {
+        int hashCode = -399217223;
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ResultId);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ReducerId);
+        hashCode = hashCode * -1521134295 + Kind.GetHashCode();
+        hashCode = hashCode * -1521134295 + EqualityComparer<Type>.Default.GetHashCode(ResultValueType);
+        hashCode = hashCode * -1521134295 + EqualityComparer<Type>.Default.GetHashCode(MessageType);
+        hashCode = hashCode * -1521134295 + EqualityComparer<Type>.Default.GetHashCode(MessageSerializedType);
+        return hashCode;
+      }
     }
   }
 }

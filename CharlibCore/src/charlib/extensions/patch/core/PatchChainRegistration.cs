@@ -83,16 +83,14 @@ namespace Charlib.PatchChain {
     public static IPatchChainRegistrationCollectionInput<V,C> AsDeclarable<
       V,C
     >(
-      this IPatchChainRegistrationCollection self,
-      IDiscriminator<V, C>? _ = null
+      this IPatchChainRegistrationCollection self
     ) {
       return (IPatchChainRegistrationCollectionInput<V,C>)(self);
     }
     public static IPatchChainRegistrationCollection<V,C> AsInvocable<
       V,C
     >(
-      this IPatchChainRegistrationCollection self,
-      IDiscriminator<V, C>? _ = null
+      this IPatchChainRegistrationCollection self
     ) {
       return (IPatchChainRegistrationCollection<V,C>)(self);
     }

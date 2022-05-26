@@ -1,4 +1,6 @@
 using Charlib.PatchChain;
+using Charlib.PatchChain.Override;
+using Charlib.PlayerDict;
 using Charlib.Mocks;
 using NUnit.Framework;
 
@@ -9,6 +11,7 @@ namespace Charlib.testing {
     public void patchOverride_should_registerWithNoGenericParameters() {
       using(var game = new MockGame()) {
         var patchKey = new FirepitCookingTime();
+        var overrideKey = patchKey.AsPatchOverrideTypeKey();
         game.PatchChainRegistry.Declare(FirepitCookingTime.TypeId);
         // assert preconditions
         Assert.That(
@@ -30,9 +33,10 @@ namespace Charlib.testing {
           Is.EqualTo(patchKey.ValueType));
         Assert.That(patchRegistration.Key.ContextType,
           Is.EqualTo(patchKey.ContextType));
-        var playerDictTypeKey = game.DictKeyRegistry.Get(patchKey.Id);
+        var playerDictTypeKey = game.DictKeyRegistry.MaybeGet(
+          overrideKey.InferDictKey());
         Assert.That(playerDictTypeKey, Is.Not.Null);
-        Assert.That(playerDictTypeKey.ValueType, Is.EqualTo(patchKey.ValueType));
+        Assert.That(playerDictTypeKey!.ValueType, Is.EqualTo(patchKey.ValueType));
       }
     }
   }

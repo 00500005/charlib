@@ -35,13 +35,18 @@ namespace Charlib.PlayerDict.Reducer {
       public void Register(IPlayerDictReducerDefinition def) {
         string id = def.ReducerKey.ReducerId;
         if (Definitions.ContainsKey(id)) {
-          throw new InvalidOperationException($"Reducer {id} already registered. IDs cannot be reused");
+          if (!Get(id).Equals(def)) {
+            throw new InvalidOperationException(
+              $"Reducer {id} already registered. IDs cannot be reused"
+            );
+          }
+        } else {
+          CharlibMod.Logger.Debug(
+            "Registering Reducer id {0} as {1}",
+            id, def.ReducerKey.ResultValueType.FullName
+          );
+          Definitions[id] = def;
         }
-        CharlibMod.Logger.Debug(
-          "Registering Reducer id {0} as {1}",
-          id, def.ReducerKey.ResultValueType.FullName
-        );
-        Definitions[id] = def;
       }
     }
   }

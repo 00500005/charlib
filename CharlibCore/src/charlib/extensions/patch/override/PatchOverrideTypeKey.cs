@@ -39,11 +39,6 @@ namespace Charlib.PatchChain.Override {
     ) {
       return IPlayerDictTypeKeyImpl.Create<V>(key.Id);
     }
-    public static IPlayerDictTypeKey InferDictKey(
-      this IPatchOverrideTypeKey key
-    ) {
-      return IPlayerDictTypeKeyImpl.Create(key.ValueType, key.Id);
-    }
     
     public static IPlayerDictReducerTypeKey<
       V,V,PatchOverrideSerializedValue<V>
@@ -113,15 +108,12 @@ namespace Charlib.PatchChain.Override {
         var reducerRegistry = manager.ReducerRegistry;
         var pdKey = this.InferDictKey();
         var reducerKey = this.InferReducerKey();
-        if (!pdRegistry.Has(pdKey))
-        {
-          pdRegistry.Register(pdKey);
-        }
+        pdRegistry.Declare(pdKey);
         if (!reducerRegistry.Has(reducerKey.ReducerId))
         {
           ReducerFacade.DefineReducer(
             reducerRegistry, reducerKey, this.ApplyOverrideToPlayer<V>
-           );
+          );
         }
         patchRegistry.Declare(this);
         var patchReg = patchRegistry.GetPatchChainDeclaration(this)

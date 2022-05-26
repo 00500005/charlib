@@ -22,10 +22,9 @@ namespace Charlib.PlayerDict {
     }
     public static IPlayerDictTypeKey<V> CreateTypeKey<V>(
       IPlayerDictTypeKeyRegistry reg,
-      string? id = null,
-      IDiscriminator<V>? _ = null
+      string? id = null
     ) {
-      return IPlayerDictTypeKeyImpl.Create(id, _);
+      return IPlayerDictTypeKeyImpl.Create<V>(id);
     }
 
     public static PlayerDictEntity CreateAndRegisterPlayerDict(

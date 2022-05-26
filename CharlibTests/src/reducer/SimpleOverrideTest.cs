@@ -36,8 +36,7 @@ namespace Charlib.testing {
       ) {
         OverrideTypeKey = PatchOverrideFacade.OverrideTypeKey(Key);
         Game = new MockGame();
-        PatchOverrideFacade.RegisterOverride(
-          OverrideTypeKey,
+        OverrideTypeKey.Register(
           Game.Manager,
           Game.PatchChainRegistry
         );

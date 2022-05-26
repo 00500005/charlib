@@ -27,7 +27,7 @@ namespace Charlib {
         def.ReducerKey,
         stat.ValueFromString(reg, rawValue),
         callback != null 
-          ?  (pd, _) => callback(pd.Get(stat.InferDictKey().Id)?.ToString())
+          ?  (pd, _) => callback(pd.Get(stat.Id)?.ToString())
           : null
       );
     }

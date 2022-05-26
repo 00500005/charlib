@@ -20,8 +20,7 @@ namespace Charlib.PatchChain {
   }
   public static class IPatchChainRegistryExt {
     public static void Declare<V,C,S>(
-      this IPatchChainRegistry reg,
-      IDiscriminator<V,C,S>? _ = null
+      this IPatchChainRegistry reg
     ) where S : IPatchTypeKey<V,C>,new() {
       reg.Declare<V,C>(new S());
     }

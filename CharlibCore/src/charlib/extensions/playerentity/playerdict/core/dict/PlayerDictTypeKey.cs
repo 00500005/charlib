@@ -13,46 +13,24 @@ namespace Charlib {
     { }
     public static class IPlayerDictTypeKeyImpl {
       public static IPlayerDictTypeKey<V> Create<V>(
-        string? id = null,
-        IDiscriminator<V>? _ = null
+        string? id = null
       ) {
         return new Impl<V>(id);
       }
-      public static IPlayerDictTypeKey Create(
-        Type type,
-        string? id = null
-      ) {
-        return new Impl(type, id);
-      }
-      private class Impl : IPlayerDictTypeKey {
-        public Impl(
-          Type valueType,
-          string? id = null
-        ) {
-          this.ValueType = valueType;
-          this.Id = id == null ? this.ValueType.Name : id;
+      private class Impl<V> : IPlayerDictTypeKey<V> {
+        public Impl(string? id = null) { 
+          Id = id ?? typeof(V).Name;
         }
-        public Type ValueType {get;}
+        public Type ValueType => typeof(V);
         public string Id {get;}
-      }
-      private class Impl<V> 
-        : Impl, IPlayerDictTypeKey<V> 
-      {
-        public Impl(string? id = null, Type? valueType = null) 
-          : base(valueType ?? typeof(V), id)
-        { }
       }
     }
     public static class IPlayerDictKeyExts {
       public static IPlayerDictTypeKey<V> Cast<V>(
-        this IPlayerDictTypeKey self,
-        IDiscriminator<V>? _ = null
+        this IPlayerDictTypeKey self
       ) {
         var asDerived = self as IPlayerDictTypeKey<V>;
-        if (asDerived != null) {
-          return asDerived;
-        }
-        if (!self.ValueType.IsAssignableTo<V>()) {
+        if (asDerived == null) {
           throw new InvalidCastException(
             $@"Cannot cast TypeKey {
               self.Id
@@ -61,10 +39,7 @@ namespace Charlib {
             }] to a key with [ValueType = {typeof(V).FullName}]"
           );
         }
-        return IPlayerDictTypeKeyImpl.Create(
-          self.Id,
-          _
-        );
+        return asDerived;
       }
     }
   }
