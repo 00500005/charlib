@@ -72,7 +72,7 @@ namespace Charlib.PlayerDict.Reducer {
       public Type ResultValueType => typeof(V);
       public Type MessageType => typeof(M);
       public Type MessageSerializedType => typeof(S);
-      public override bool Equals(object obj) {
+      public override bool Equals(object? obj) {
         var casted = obj as IPlayerDictReducerTypeKey<V, M, S>;
         if (casted == null) {
           return this == null;

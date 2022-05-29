@@ -11,7 +11,7 @@ namespace Charlib.PatchChain {
     public IEnumerable<IPatchChainRegistrationCollection> GetPatchChains();
     public IEnumerable<IPatchOverrideTypeKey> GetPatchOverrideTypeKeys();
     public void Register<V,C>(
-      IHasPrioritizedChainFn<V,C> fn,
+      IFullyQualifiedChainFn<V,C> fn,
       IPatchTypeKey<V,C> key
     );
     public IPatchChainRegistrationCollectionInput<V,C> Declare<V, C>(
@@ -70,7 +70,7 @@ namespace Charlib.PatchChain {
       public Dictionary<string, IPatchChainRegistrationCollection> Registry =
         new Dictionary<string, IPatchChainRegistrationCollection>();
       public void Register<V,C>(
-        IHasPrioritizedChainFn<V,C> fn,
+        IFullyQualifiedChainFn<V,C> fn,
         IPatchTypeKey<V,C> key
       ) {
         Declare(key);
@@ -94,7 +94,7 @@ namespace Charlib.PatchChain {
         Declare<V, C>(IPatchTypeKey<V, C> key)
       {
         if (!Registry.ContainsKey(key.Id)) {
-          Registry[key.Id] = PatchChainRegistrationFacade.Empty(key);
+          Registry[key.Id] = PatchRegistrationFacade.Empty(key);
           CharlibMod.Logger.Debug(
             "Declaring PatchChain {0} as {1}",
             key.Id, key.ValueType.FullName

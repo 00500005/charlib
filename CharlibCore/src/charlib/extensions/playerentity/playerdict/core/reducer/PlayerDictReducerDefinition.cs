@@ -109,7 +109,7 @@ namespace Charlib.PlayerDict.Reducer {
         var s = serializedMessage.MsgData.DeserializeProto<S>();
         return s.AsValue(standardDeps);
       }
-      public override bool Equals(object obj)
+      public override bool Equals(object? obj)
       {
         var casted = obj as IPlayerDictReducerDefinition<V,M,S>;
         if (casted == null) {

@@ -9,26 +9,40 @@ namespace Charlib.PatchChain {
   public interface IHasPriority {
     double Priority {get;}
   }
-  public interface IHasPrioritizedChainFn<V,in C> 
+  public interface IFullyQualifiedChainFn<V,in C> 
     : IHasPriority
-    , IHasChainFn<V,C> { }
+    , IHasChainId
+    , IHasChainFn<V,C> {}
   public static class IHasPrioritizedChainFnExt {
-    public static IHasPrioritizedChainFn<V,C> WithPriority<V,C>(
-      this IHasChainFn<V,C> self,
+    public static IFullyQualifiedChainFn<V,C> WithPriority<V,C>(
+      this IFullyQualifiedChainFn<V,C> self,
       double priority
     ) {
       return new IHasPrioritizedChainFnImpl.PrioritizedChainFnStruct<V,C>(
         self.ChainFn,
-        priority
+        priority,
+        self.Id
       );
     }
-    public static IHasPrioritizedChainFn<V,C> WithPriority<V,C>(
+    public static IFullyQualifiedChainFn<V,C> WithId<V,C>(
+      this IFullyQualifiedChainFn<V,C> self,
+      string id
+    ) {
+      return new IHasPrioritizedChainFnImpl.PrioritizedChainFnStruct<V,C>(
+        self.ChainFn,
+        self.Priority,
+        id
+      );
+    }
+    public static IFullyQualifiedChainFn<V,C> WithPriorityAndId<V,C>(
       this ChainFn<V,C> self,
-      double priority
+      double priority,
+      string id
     ) {
       return new IHasPrioritizedChainFnImpl.PrioritizedChainFnStruct<V,C>(
         self,
-        priority
+        priority,
+        id
       );
     }
   }
@@ -43,17 +57,20 @@ namespace Charlib.PatchChain {
   }
   public static class IHasPrioritizedChainFnImpl {
     public struct PrioritizedChainFnStruct<V, C>
-      : IHasPrioritizedChainFn<V, C>
+      : IFullyQualifiedChainFn<V,C>
     {
       internal PrioritizedChainFnStruct(
         ChainFn<V,C> fn,
-        double priority
+        double priority,
+        string id
       ) {
         ChainFn = fn;
         Priority = priority;
+        Id = id;
       }
       public double Priority {get;}
       public ChainFn<V, C> ChainFn {get;}
+      public string Id {get;}
     }
   }
 }

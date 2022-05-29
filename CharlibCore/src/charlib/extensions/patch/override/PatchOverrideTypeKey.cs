@@ -21,6 +21,19 @@ namespace Charlib.PatchChain.Override {
       string valueAsString
     );
   }
+  public struct PatchOverrideChainFnRegistration<V>
+    : IHasChainFn<V, IHasPlayer>
+  {
+    public PatchOverrideChainFnRegistration(
+      string id, 
+      ChainFn<V, IHasPlayer> fn
+    ) {
+      Id = id;
+      ChainFn = fn;
+    }
+    public string Id {get;} 
+    public ChainFn<V, IHasPlayer> ChainFn {get;}
+  }
   public static class IPatchOverrideTypeKeyExt {
     public static IPatchOverrideTypeKey<V> Cast<V>(
       this IPatchOverrideTypeKey self
@@ -65,14 +78,13 @@ namespace Charlib.PatchChain.Override {
       return value;
     }
 
-    public static ChainFn<
-      V,
-      IHasPlayer
-    > ApplyOverrideUsingPatchContext<V>(
-      this IPatchOverrideTypeKey<V> key,
-      IPlayerDictTypeKey<V> pdKey,
-      IPlayerDictTypeKeyRegistry registry
-    ) {
+    public static ChainFn<V, IHasPlayer>
+      ApplyOverrideUsingPatchContext<V>(
+        this IPatchOverrideTypeKey<V> key,
+        IPlayerDictTypeKey<V> pdKey,
+        IPlayerDictTypeKeyRegistry registry
+      ) 
+    {
       ChainFn<V,IHasPlayer> fn = (
         context,
         original 
@@ -120,8 +132,11 @@ namespace Charlib.PatchChain.Override {
           !.AsDeclarable<V,IHasPlayer>();
         var fn = this
           .ApplyOverrideUsingPatchContext(pdKey, pdRegistry)
-          .WithPriority(PatchFacade.PriorityLast);
-        if (!patchReg.HasFn(fn)) {
+          .WithPriorityAndId(
+            PatchFacade.PriorityLast
+            , pdKey.Id
+          );
+        if (!patchReg.HasFn(fn.Id)) {
           patchReg.Add(fn);
         }
       }
