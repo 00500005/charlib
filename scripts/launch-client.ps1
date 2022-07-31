@@ -3,5 +3,5 @@ $workspaceFolder="$PSScriptRoot/.."
 mono `
   --debugger-agent=address=127.0.0.1:12345,server=y,suspend=n,transport=dt_socket `
   --debug "$workspaceFolder/vendor-vs/$VS_VERSION/Vintagestory.exe" `
-  --addModPath "$workspaceFolder/bin/Debug/net461" `
-  --addOrigin "$workspaceFolder/resources/assets"
+  --addModPath "$workspaceFolder/CharlibCore/bin/Debug/net461" `
+  --addOrigin "$workspaceFolder/CharlibCore/resources/assets"
