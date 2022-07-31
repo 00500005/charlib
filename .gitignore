@@ -2,7 +2,7 @@ tmp/
 vendor/*
 !vendor/README.md
 vendor-vs/*
-!vendor-vs/link.sh
+!vendor-vs/link.ps1
 obj/
 bin/
 TestResults/
